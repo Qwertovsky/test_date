@@ -1,11 +1,13 @@
 package com.qwertovsky.test.test_date;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -76,7 +78,10 @@ public class TestController {
 						""",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setObject(1, entity.getTestDate(), Types.DATE);
+			String zoneId = entity.getZoneId();
+			statement.setDate(1,
+					new Date(entity.getTestDate().getTime()),
+					Calendar.getInstance(TimeZone.getTimeZone(zoneId)));
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();

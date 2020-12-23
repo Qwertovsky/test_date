@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class TestEntity {
 	private int id;
+	private String zoneId;
 	private Date testDate;
 
 	
@@ -18,6 +19,14 @@ public class TestEntity {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getZoneId() {
+		return zoneId;
+	}
+
+	public void setZoneId(String zoneId) {
+		this.zoneId = zoneId;
 	}
 
 	public Date getTestDate() {

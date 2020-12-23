@@ -35,7 +35,8 @@ export class TestEntitiesComponent implements OnInit {
       this.message = 'Date not selected';
       return;
     }
-    const newEntity = new TestEntity(this.dateValue);
+    const zoneId: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const newEntity = new TestEntity(this.dateValue, zoneId);
     this.testService.saveEntity(newEntity)
     .subscribe((id) => {
       newEntity.id = id;
