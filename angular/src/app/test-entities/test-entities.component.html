@@ -1,0 +1,19 @@
+<p>Dates</p>
+<ul class="dates">
+  <li *ngFor="let entity of entities">
+    <span class="date">{{entity.id}}</span>
+    ,<p-calendar [(ngModel)]="entity.testDate"
+    [showTime]="false"
+    hourFormat="24"
+    dateFormat="yy-mm-dd"></p-calendar>
+    ,<span class="date">{{entity.testDate}}</span>
+  </li>
+</ul>
+
+<hr />
+<p-calendar [(ngModel)]="dateValue"
+  [showTime]="false"
+  hourFormat="24"
+  dateFormat="yy-mm-dd"></p-calendar>
+<button (click)="saveEntity()">Save</button>
+<div>{{message}}</div>
