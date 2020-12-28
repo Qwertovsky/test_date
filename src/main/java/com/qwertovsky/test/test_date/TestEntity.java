@@ -1,9 +1,13 @@
 package com.qwertovsky.test.test_date;
 
+
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TestEntity {
 	private int id;
+	@JsonFormat(timezone = TestDateApplication.APP_TIMEZONE, pattern = "yyyy-MM-dd")
 	private Date testDate;
 
 	
