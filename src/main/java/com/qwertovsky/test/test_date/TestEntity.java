@@ -3,11 +3,11 @@ package com.qwertovsky.test.test_date;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class TestEntity {
 	private int id;
-	@JsonFormat(timezone = TestDateApplication.APP_TIMEZONE, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = DateDeserializer.class)
 	private Date testDate;
 
 	
