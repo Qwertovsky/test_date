@@ -3,7 +3,7 @@ package com.qwertovsky.test.test_date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
-	private static final String COLUMN_LABEL = "test_date";
+	private static final String COLUMN_LABEL = "test_timestamp";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
@@ -42,14 +42,14 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getDate(COLUMN_LABEL));
+				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL));
 				entities.add(entity);
 			}
 		}
 		logger.info(entities);
 		return entities;
 	}
-	
+
 	@GetMapping
 	public TestEntity getEntity(@RequestParam int id) throws Exception {
 		TestEntity entity = null;
@@ -61,8 +61,9 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getDate(COLUMN_LABEL));
+				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL));
 			}
+			logger.info("Get entity " + entity.getTestDate());
 		}
 		
 		return entity;
@@ -75,7 +76,7 @@ public class TestController {
 						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setObject(1, entity.getTestDate(), Types.DATE);
+			statement.setTimestamp(1, new Timestamp(entity.getTestDate().getTime()));
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
