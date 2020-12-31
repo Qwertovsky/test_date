@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -27,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
-	private static final String COLUMN_LABEL = "test_timestamp";
-	private static final String COLUMN_TIMEZONE = "America/Chicago";
+	private static final String COLUMN_LABEL = "test_timestamptz";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
@@ -45,8 +42,7 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL,
-						Calendar.getInstance(TimeZone.getTimeZone(COLUMN_TIMEZONE))));
+				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL));
 				entities.add(entity);
 			}
 		}
@@ -65,8 +61,7 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL,
-						Calendar.getInstance(TimeZone.getTimeZone(COLUMN_TIMEZONE))));
+				entity.setTestDate(rs.getTimestamp(COLUMN_LABEL));
 			}
 			logger.info("Get entity " + entity.getTestDate());
 		}
@@ -81,8 +76,7 @@ public class TestController {
 						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setTimestamp(1, new Timestamp(entity.getTestDate().getTime()),
-					Calendar.getInstance(TimeZone.getTimeZone(COLUMN_TIMEZONE)));
+			statement.setTimestamp(1, new Timestamp(entity.getTestDate().getTime()));
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
