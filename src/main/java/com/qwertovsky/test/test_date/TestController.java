@@ -1,13 +1,11 @@
 package com.qwertovsky.test.test_date;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -27,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
+	private static final String COLUMN_LABEL = "test_date";
+
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
 	@Autowired
@@ -37,12 +37,12 @@ public class TestController {
 		var entities = new ArrayList<TestEntity>();
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(
-						"select * from test_table");) {
+						"select * from test_table order by id");) {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getDate("test_date"));
+				entity.setTestDate(rs.getDate(COLUMN_LABEL));
 				entities.add(entity);
 			}
 		}
@@ -61,7 +61,7 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getDate("test_date"));
+				entity.setTestDate(rs.getDate(COLUMN_LABEL));
 			}
 		}
 		
@@ -72,16 +72,10 @@ public class TestController {
 	public int saveEntity(@RequestBody TestEntity entity) throws Exception {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(
-						"""
-						insert into test_table (test_date)
-						values (?)
-						""",
+						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			String zoneId = entity.getZoneId();
-			statement.setDate(1,
-					new Date(entity.getTestDate().getTime()),
-					Calendar.getInstance(TimeZone.getTimeZone(zoneId)));
+			statement.setObject(1, entity.getTestDate(), Types.DATE);
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();

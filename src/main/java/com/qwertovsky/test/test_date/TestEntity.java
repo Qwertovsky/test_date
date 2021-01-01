@@ -2,12 +2,8 @@ package com.qwertovsky.test.test_date;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 public class TestEntity {
 	private int id;
-	private String zoneId;
-	@JsonSerialize(using = DateSerializer.class)
 	private Date testDate;
 
 	
@@ -22,14 +18,6 @@ public class TestEntity {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getZoneId() {
-		return zoneId;
-	}
-
-	public void setZoneId(String zoneId) {
-		this.zoneId = zoneId;
 	}
 
 	public Date getTestDate() {
