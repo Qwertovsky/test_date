@@ -14,14 +14,14 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public class DateDeserializer extends JsonDeserializer<Date> {
 
-	private static final String format = "yyyy-MM-dd";
+	private static final String format = "yyyy-MM-dd'T'HH:mm:ss";
 
 	@Override
 	public Date deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		if (p.hasToken(JsonToken.VALUE_STRING)) {
 			String text = p.getText().trim();
-			if (text.length() != format.length()) {
+			if (text.length() != format.length() - 2) {
 				throw new InvalidFormatException(p, "Wrong date", text, Date.class);
 			}
 			try {

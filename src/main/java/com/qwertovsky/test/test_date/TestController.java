@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
-	private static final String COLUMN_LABEL = "test_timestamptz";
+	private static final String COLUMN_LABEL = "test_timestamp";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 

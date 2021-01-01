@@ -14,7 +14,13 @@ export class TestService {
   constructor(private http: HttpClient) { }
 
   public saveEntity(entity: TestEntity): Observable<number> {
-    return this.http.post<number>(CONTROLLER, entity);
+    const date: Date = entity.testDate;
+    const testDate: string = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+      .map(n => String(n).padStart(2, '0')).join('-')
+      + 'T' + [date.getHours(), date.getMinutes(), date.getSeconds()]
+      .map(n => String(n).padStart(2, '0')).join(':');
+    const body: any = Object.assign({}, entity, {testDate});
+    return this.http.post<number>(CONTROLLER, body);
   }
 
   public getEntities(): Observable<TestEntity[]> {
