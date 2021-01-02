@@ -1,14 +1,10 @@
 package com.qwertovsky.test.test_date;
 
-import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.time.ZonedDateTime;
 
 public class TestEntity {
 	private int id;
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate testDate;
+	private ZonedDateTime testDate;
 
 	
 	@Override
@@ -24,12 +20,11 @@ public class TestEntity {
 		this.id = id;
 	}
 
-	public LocalDate getTestDate() {
+	public ZonedDateTime getTestDate() {
 		return testDate;
 	}
 
-	public void setTestDate(LocalDate testDate) {
+	public void setTestDate(ZonedDateTime testDate) {
 		this.testDate = testDate;
 	}
-
 }

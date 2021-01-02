@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
-	private static final String COLUMN_LABEL = "test_date";
+	private static final String COLUMN_LABEL = "test_timestamp";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
@@ -43,7 +45,12 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getObject(COLUMN_LABEL, LocalDate.class));
+				entity.setTestDate(
+						ZonedDateTime.of(
+								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
+								ZoneId.systemDefault()
+								)
+						);
 				entities.add(entity);
 			}
 		}
@@ -62,7 +69,12 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getObject(COLUMN_LABEL, LocalDate.class));
+				entity.setTestDate(
+						ZonedDateTime.of(
+								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
+								ZoneId.systemDefault()
+								)
+						);
 			}
 			logger.info("Get entity: " + entity.getTestDate());
 		}
@@ -77,7 +89,11 @@ public class TestController {
 						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setObject(1, entity.getTestDate(), Types.DATE);
+			statement.setObject(1,
+					entity.getTestDate()
+						.withZoneSameInstant(ZoneId.systemDefault())
+						.toLocalDateTime(),
+					Types.TIMESTAMP);
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
