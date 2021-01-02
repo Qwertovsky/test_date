@@ -1,12 +1,11 @@
 package com.qwertovsky.test.test_date;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 public class TestEntity {
 	private int id;
-	private OffsetDateTime testDate;
+	private LocalDateTime testDate;
 
-	
 	@Override
 	public String toString() {
 		return "TestEntity [id=" + id + ", testDate=" + testDate + "]";
@@ -20,11 +19,11 @@ public class TestEntity {
 		this.id = id;
 	}
 
-	public OffsetDateTime getTestDate() {
+	public LocalDateTime getTestDate() {
 		return testDate;
 	}
 
-	public void setTestDate(OffsetDateTime testDate) {
+	public void setTestDate(LocalDateTime testDate) {
 		this.testDate = testDate;
 	}
 
