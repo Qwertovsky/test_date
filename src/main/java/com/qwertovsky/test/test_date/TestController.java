@@ -3,10 +3,8 @@ package com.qwertovsky.test.test_date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
-	private static final String COLUMN_LABEL = "test_timestamp";
-	private static final String COLUMN_TIMEZONE = "UTC";
+	private static final String COLUMN_LABEL = "test_timestamptz";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
@@ -47,10 +44,7 @@ public class TestController {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
 				entity.setTestDate(
-						ZonedDateTime.of(
-								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
-								ZoneId.of(COLUMN_TIMEZONE)
-								)
+						rs.getObject(COLUMN_LABEL, OffsetDateTime.class).toZonedDateTime()
 						);
 				entities.add(entity);
 			}
@@ -71,10 +65,7 @@ public class TestController {
 				entity = new TestEntity();
 				entity.setId(id);
 				entity.setTestDate(
-						ZonedDateTime.of(
-								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
-								ZoneId.of(COLUMN_TIMEZONE)
-								)
+						rs.getObject(COLUMN_LABEL, OffsetDateTime.class).toZonedDateTime()
 						);
 			}
 			logger.info("Get entity: " + entity.getTestDate());
@@ -92,9 +83,8 @@ public class TestController {
 			) {
 			statement.setObject(1,
 					entity.getTestDate()
-						.withZoneSameInstant(ZoneId.of(COLUMN_TIMEZONE))
-						.toLocalDateTime(),
-					Types.TIMESTAMP);
+					.withZoneSameInstant(ZoneId.systemDefault())
+					.toLocalDateTime());
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
