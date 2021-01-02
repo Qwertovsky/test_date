@@ -1,14 +1,11 @@
 package com.qwertovsky.test.test_date;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class TestEntity {
 	private int id;
-	private String zoneId;
-	@JsonDeserialize(using = DateDeserializer.class)
-	private LocalDateTime testDate;
+	private LocalDate testDate;
 
 	
 	@Override
@@ -24,20 +21,12 @@ public class TestEntity {
 		this.id = id;
 	}
 
-	public String getZoneId() {
-		return zoneId;
-	}
-
-	public void setZoneId(String zoneId) {
-		this.zoneId = zoneId;
-	}
-
-	public LocalDateTime getTestDate() {
+	public LocalDate getTestDate() {
 		return testDate;
 	}
 
-	public void setTestDate(LocalDateTime testDate) {
+	public void setTestDate(LocalDate testDate) {
 		this.testDate = testDate;
 	}
-	
+
 }

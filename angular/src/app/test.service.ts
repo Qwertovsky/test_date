@@ -14,7 +14,11 @@ export class TestService {
   constructor(private http: HttpClient) { }
 
   public saveEntity(entity: TestEntity): Observable<number> {
-    return this.http.post<number>(CONTROLLER, entity);
+    const date: Date = entity.testDate;
+    const testDate: string = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+      .map(n => String(n).padStart(2, '0')).join('-');
+    const body: any = Object.assign({}, entity, {testDate});
+    return this.http.post<number>(CONTROLLER, body);
   }
 
   public getEntities(): Observable<TestEntity[]> {
@@ -34,7 +38,9 @@ export class TestService {
   }
 
   private mapEntity(obj: any): TestEntity {
-    const entity = new TestEntity(new Date(obj.testDate), "");
+    const ymd: number[] = obj.testDate.split('-').map((s: string) => Number(s));
+    const date: Date = new Date(ymd[0], ymd[1] - 1, ymd[2])
+    const entity = new TestEntity(date);
     entity.id = obj.id;
     return entity;
   }
