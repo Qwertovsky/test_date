@@ -2,9 +2,12 @@ package com.qwertovsky.test.test_date;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 public class TestEntity {
 	private int id;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate testDate;
 
 	
