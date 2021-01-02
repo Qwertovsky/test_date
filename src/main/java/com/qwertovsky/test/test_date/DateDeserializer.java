@@ -1,7 +1,7 @@
 package com.qwertovsky.test.test_date;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,10 +15,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-public class DateDeserializer extends JsonDeserializer<LocalDate> {
+public class DateDeserializer extends JsonDeserializer<LocalDateTime> {
 
 	@Override
-	public LocalDate deserialize(JsonParser p, DeserializationContext ctxt)
+	public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		if (p.hasToken(JsonToken.VALUE_STRING)) {
 			String text = p.getText().trim();
@@ -28,13 +28,13 @@ public class DateDeserializer extends JsonDeserializer<LocalDate> {
 						.appendZoneId()
 						.toFormatter()
 						;
-				LocalDate result = ZonedDateTime.parse(text, formatter)
-						.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
+				LocalDateTime result = ZonedDateTime.parse(text, formatter)
+						.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 				return result;
 			} catch (Exception e) {
 				throw new InvalidFormatException(p, "Wrong date", text, Date.class);
 			}
 		}
-		return (LocalDate) ctxt.handleUnexpectedToken(LocalDate.class, p);
+		return (LocalDateTime) ctxt.handleUnexpectedToken(LocalDateTime.class, p);
 	}
 }

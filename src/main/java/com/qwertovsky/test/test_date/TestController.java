@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class TestController {
 
+	private static final String COLUMN_LABEL = "test_date";
+
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
 	@Autowired
@@ -41,7 +47,7 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getObject("test_date", LocalDate.class));
+				entity.setTestDate(LocalDateTime.of(rs.getObject(COLUMN_LABEL, LocalDate.class), LocalTime.MIN));
 				entities.add(entity);
 			}
 		}
@@ -60,7 +66,7 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getObject("test_date", LocalDate.class));
+				entity.setTestDate(LocalDateTime.of(rs.getObject(COLUMN_LABEL, LocalDate.class), LocalTime.MIN));
 			}
 			logger.info("Get entity: " + entity.getTestDate());
 		}
@@ -72,13 +78,15 @@ public class TestController {
 	public int saveEntity(@RequestBody TestEntity entity) throws Exception {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(
-						"""
-						insert into test_table (test_date)
-						values (?)
-						""",
+						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setObject(1, entity.getTestDate(), Types.DATE);
+			String zoneId = entity.getZoneId();
+			statement.setObject(1,
+					ZonedDateTime.of(entity.getTestDate(), ZoneId.systemDefault())
+					.withZoneSameInstant(ZoneId.of(zoneId))
+					.toLocalDate(),
+					Types.DATE);
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();

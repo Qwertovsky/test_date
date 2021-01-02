@@ -34,7 +34,7 @@ export class TestService {
   }
 
   private mapEntity(obj: any): TestEntity {
-    const entity = new TestEntity(new Date(obj.testDate));
+    const entity = new TestEntity(new Date(obj.testDate), "");
     entity.id = obj.id;
     return entity;
   }
