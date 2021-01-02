@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +42,7 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(
-						rs.getObject(COLUMN_LABEL, OffsetDateTime.class).toZonedDateTime()
-						);
+				entity.setTestDate(rs.getObject(COLUMN_LABEL, OffsetDateTime.class));
 				entities.add(entity);
 			}
 		}
@@ -64,9 +61,7 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(
-						rs.getObject(COLUMN_LABEL, OffsetDateTime.class).toZonedDateTime()
-						);
+				entity.setTestDate(rs.getObject(COLUMN_LABEL, OffsetDateTime.class));
 			}
 			logger.info("Get entity: " + entity.getTestDate());
 		}
@@ -81,10 +76,7 @@ public class TestController {
 						"insert into test_table (" + COLUMN_LABEL + ") values (?)",
 						PreparedStatement.RETURN_GENERATED_KEYS)
 			) {
-			statement.setObject(1,
-					entity.getTestDate()
-					.withZoneSameInstant(ZoneId.systemDefault())
-					.toLocalDateTime());
+			statement.setObject(1, entity.getTestDate());
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
 			statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();

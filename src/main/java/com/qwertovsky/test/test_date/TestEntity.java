@@ -1,10 +1,10 @@
 package com.qwertovsky.test.test_date;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 public class TestEntity {
 	private int id;
-	private ZonedDateTime testDate;
+	private OffsetDateTime testDate;
 
 	
 	@Override
@@ -20,11 +20,12 @@ public class TestEntity {
 		this.id = id;
 	}
 
-	public ZonedDateTime getTestDate() {
+	public OffsetDateTime getTestDate() {
 		return testDate;
 	}
 
-	public void setTestDate(ZonedDateTime testDate) {
+	public void setTestDate(OffsetDateTime testDate) {
 		this.testDate = testDate;
 	}
+
 }
