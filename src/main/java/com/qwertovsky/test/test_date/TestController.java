@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
 	private static final String COLUMN_LABEL = "test_timestamp";
+	private static final String COLUMN_TIMEZONE = "UTC";
 
 	private static final Logger logger = LogManager.getLogger(TestController.class);
 
@@ -48,7 +49,7 @@ public class TestController {
 				entity.setTestDate(
 						ZonedDateTime.of(
 								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
-								ZoneId.systemDefault()
+								ZoneId.of(COLUMN_TIMEZONE)
 								)
 						);
 				entities.add(entity);
@@ -72,7 +73,7 @@ public class TestController {
 				entity.setTestDate(
 						ZonedDateTime.of(
 								rs.getObject(COLUMN_LABEL, LocalDateTime.class),
-								ZoneId.systemDefault()
+								ZoneId.of(COLUMN_TIMEZONE)
 								)
 						);
 			}
@@ -91,7 +92,7 @@ public class TestController {
 			) {
 			statement.setObject(1,
 					entity.getTestDate()
-						.withZoneSameInstant(ZoneId.systemDefault())
+						.withZoneSameInstant(ZoneId.of(COLUMN_TIMEZONE))
 						.toLocalDateTime(),
 					Types.TIMESTAMP);
 			logger.info(statement.unwrap(PreparedStatement.class).toString());
