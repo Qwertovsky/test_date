@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class TestController {
 			while (rs.next()) {
 				TestEntity entity = new TestEntity();
 				entity.setId(rs.getInt("id"));
-				entity.setTestDate(rs.getDate("test_date"));
+				entity.setTestDate(rs.getObject("test_date", LocalDate.class));
 				entities.add(entity);
 			}
 		}
@@ -59,8 +60,9 @@ public class TestController {
 			if (rs.next()) {
 				entity = new TestEntity();
 				entity.setId(id);
-				entity.setTestDate(rs.getDate("test_date"));
+				entity.setTestDate(rs.getObject("test_date", LocalDate.class));
 			}
+			logger.info("Get entity: " + entity.getTestDate());
 		}
 		
 		return entity;

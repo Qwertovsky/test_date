@@ -1,10 +1,10 @@
 package com.qwertovsky.test.test_date;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TestEntity {
 	private int id;
-	private Date testDate;
+	private LocalDate testDate;
 
 	
 	@Override
@@ -20,15 +20,12 @@ public class TestEntity {
 		this.id = id;
 	}
 
-	public Date getTestDate() {
+	public LocalDate getTestDate() {
 		return testDate;
 	}
 
-	public void setTestDate(Date testDate) {
+	public void setTestDate(LocalDate testDate) {
 		this.testDate = testDate;
 	}
-
-	
-	
 	
 }
