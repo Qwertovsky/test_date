@@ -10,8 +10,10 @@ import org.postgresql.ds.PGSimpleDataSource;
 @SpringBootApplication
 public class TestDateApplication {
 
+	public static final String APP_TIMEZONE = "Europe/Moscow";
+
 	public static void main(String[] args) {
-		System.setProperty("user.timezone", "Europe/Moscow");
+		System.setProperty("user.timezone", APP_TIMEZONE);
 		SpringApplication.run(TestDateApplication.class, args);
 	}
 
